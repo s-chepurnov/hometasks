@@ -16,7 +16,6 @@ class PoWMiner[HF <: CryptographicHash32](hashFunction: HF) {
       nonce = nonce + 1
       provedData = new ProvedData(data , nonce)
     }
-
     provedData
   }
 
