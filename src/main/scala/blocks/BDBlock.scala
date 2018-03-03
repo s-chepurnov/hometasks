@@ -1,6 +1,7 @@
 package blocks
 
 import io.circe.Json
+import org.msgpack.core.MessagePack
 import scorex.core.block.Block
 import scorex.core.block.Block.Version
 import scorex.core.serialization.Serializer
@@ -31,7 +32,17 @@ case class BDBlock(transactions: Seq[BlockchainDevelopersTransaction],
 
 object BDBlockSerializer extends Serializer[BDBlock] {
 
-  override def toBytes(obj: BDBlock): Array[Version] = ???
+  override def toBytes(obj: BDBlock): Array[Version] = {
+    val packer = MessagePack.newDefaultBufferPacker()
+    packer.packArrayHeader(obj.transactions.size)
+    for {
+      tx <- obj.transactions
+    } yield {
+      //packer.packBinaryHeader(tx.inputs.size)
+      //packer.writePayload(tx)
+    }
+    packer.toByteArray
+  }
 
   override def parseBytes(bytes: Array[Version]): Try[BDBlock] = ???
 
