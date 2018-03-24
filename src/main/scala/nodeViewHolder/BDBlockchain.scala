@@ -1,14 +1,14 @@
 package nodeViewHolder
 
 import blocks.BDBlock
-import scorex.core.ModifierId
+import scorex.core.{ModifierId, consensus}
 import scorex.core.consensus.BlockChain.Score
 import scorex.core.consensus.{BlockChain, History, ModifierSemanticValidity}
 import transaction.{BlockchainDevelopersTransaction, Sha256PreimageProposition}
 
 import scala.util.Try
 
-class BDBlockchain extends BlockChain[Sha256PreimageProposition, BlockchainDevelopersTransaction, BDBlock, DBSyncInfo,
+class BDBlockchain(blockchain: Seq[BDBlock] = Seq()) extends BlockChain[Sha256PreimageProposition, BlockchainDevelopersTransaction, BDBlock, DBSyncInfo,
   BDBlockchain] {
   override def height(): Int = ???
 
@@ -22,7 +22,10 @@ class BDBlockchain extends BlockChain[Sha256PreimageProposition, BlockchainDevel
 
   override def chainScore(): Score = ???
 
-  override def append(modifier: BDBlock): Try[(BDBlockchain, History.ProgressInfo[BDBlock])] = ???
+  override def append(modifier: BDBlock): Try[(BDBlockchain, History.ProgressInfo[BDBlock])] = {
+    //TODO: add to 'toApply'
+    Try(new BDBlockchain(blockchain ++ List(modifier)), new consensus.History.ProgressInfo[BDBlock]() {})
+  }
 
   override def reportSemanticValidity(modifier: BDBlock, valid: Boolean, lastApplied: ModifierId): (BDBlockchain, History.ProgressInfo[BDBlock]) = ???
 

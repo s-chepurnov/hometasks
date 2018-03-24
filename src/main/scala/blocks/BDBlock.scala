@@ -7,9 +7,9 @@ import scorex.core.block.Block.Version
 import scorex.core.serialization.Serializer
 import scorex.core.{ModifierId, ModifierTypeId}
 import scorex.crypto.hash.{Digest32, Sha256}
-import transaction.{BCTransactionSerializer, BlockchainDevelopersTransaction, OutputId, Sha256PreimageProposition}
+import transaction.{BCTransactionSerializer, BlockchainDevelopersTransaction, Sha256PreimageProposition}
 
-import scala.util.{Success, Try}
+import scala.util.Try
 
 case class BDBlock(transactions: Seq[BlockchainDevelopersTransaction],
                    parentId: ModifierId,
@@ -22,8 +22,7 @@ case class BDBlock(transactions: Seq[BlockchainDevelopersTransaction],
   override val modifierTypeId: ModifierTypeId = ModifierTypeId @@ 2.toByte
 
   val hash: Digest32 = {
-    //TODO:
-    Sha256(this.bytes)
+    Sha256(serializer.toBytes(this))
   }
 
   override val id: ModifierId = ModifierId @@ (Digest32 untag hash)
